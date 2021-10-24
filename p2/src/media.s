@@ -16,7 +16,8 @@
 
 longlista:	.int   (.-lista)/4
 resultado:	.quad   0
-  formato: 	.asciz	"suma = %ld = 0x%lx hex\n"
+    resto:	.quad		0
+  formato: 	.asciz	"media = %ld = 0x%lx hex\nresto = %ld = 0x%lx hex\n"
 
 # opción: 1) no usar printf, 2)3) usar printf/fmt/exit, 4) usar tb main
 # 1) as  suma.s -o suma.o
@@ -38,12 +39,14 @@ _start: .global _start
 trabajar:
 	mov     $lista, %rbx
 	mov  longlista, %ecx
-	call suma		# == suma(&lista, longlista);
+	call media		# == media(&lista, longlista);
+	# ret: %eax = media, %edx = resto
 	mov  %eax, resultado
-  mov  %edx, resultado + 4
+  mov  %edx, resto
 	ret
 
-suma:
+media:
+  # Suma
 	mov  $0, %eax   # retorno y guardado del valor
 	mov  $0, %rsi   # contador
   mov  $0, %edx   # registro con acarreos
@@ -60,12 +63,17 @@ bucle:
 	mov   %r8d, %eax # Mover la suma al valor de retorno
 	cltd 						# Extender signo de %eax --> %edx:%eax
 
+	# Division
+	idivl %ecx
+
 	ret
 
 imprim_C:			# requiere libC
 	mov   $formato, %rdi
-	mov   resultado,%rsi
-	mov   resultado,%rdx
+	mov   resultado,%esi
+	mov   resultado,%edx
+	mov   resto,%ecx
+	mov   resto,%r8d
 	mov          $0,%eax	# varargin sin xmm
 	call  printf		# == printf(formato, res, res);
 	ret
