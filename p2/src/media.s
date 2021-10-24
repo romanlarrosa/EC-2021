@@ -44,9 +44,7 @@ suma:
   mov  $0, %edx   # registro con acarreos   
 bucle:
 	add  (%rbx,%rsi,4), %eax
-  jnc   continua  # saltar si ha habido acarreo
-  inc   %edx      # incrementar el registro con el acarreo
-continua:
+	adc		$0, %edx
 	inc   %rsi
 	cmp   %rsi,%rcx
 	jne    bucle
