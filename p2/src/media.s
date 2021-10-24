@@ -3,15 +3,20 @@
 #            .int 0x10000000, 0x10000000, 0x10000000, 0x10000000
 #            .int 0x10000000, 0x10000000, 0x10000000, 0x10000000
 #            .int 0x10000000, 0x10000000, 0x10000000, 0x10000000
-lista:		  .int 0x0fffffff, 0x0fffffff, 0x0fffffff, 0x0fffffff
-            .int 0x0fffffff, 0x0fffffff, 0x0fffffff, 0x0fffffff
-            .int 0x0fffffff, 0x0fffffff, 0x0fffffff, 0x0fffffff
-            .int 0x0fffffff, 0x0fffffff, 0x0fffffff, 0x0fffffff
+# lista:		  .int 0x0fffffff, 0x0fffffff, 0x0fffffff, 0x0fffffff
+#            .int 0x0fffffff, 0x0fffffff, 0x0fffffff, 0x0fffffff
+#            .int 0x0fffffff, 0x0fffffff, 0x0fffffff, 0x0fffffff
+#            .int 0x0fffffff, 0x0fffffff, 0x0fffffff, 0x0fffffff
+ lista:		  .int 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+            .int 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+            .int 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+            .int 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
 
 
 longlista:	.int   (.-lista)/4
 resultado:	.quad   0
-  formato: 	.asciz	"suma = %lu = 0x%lx hex\n"
+  formato: 	.asciz	"suma = %ld = 0x%lx hex\n"
 
 # opción: 1) no usar printf, 2)3) usar printf/fmt/exit, 4) usar tb main
 # 1) as  suma.s -o suma.o
@@ -39,15 +44,21 @@ trabajar:
 	ret
 
 suma:
-	mov  $0, %eax   # suma de los numeros
+	mov  $0, %eax   # retorno y guardado del valor
 	mov  $0, %rsi   # contador
-  mov  $0, %edx   # registro con acarreos   
+  mov  $0, %edx   # registro con acarreos
+	mov  $0, %r8d   # suma de los numeros
 bucle:
-	add  (%rbx,%rsi,4), %eax
+	mov  (%rbx,%rsi,4), %eax # Mover elemento de la lista a %eax
+	cltd 						# Extender signo de %eax --> %edx:%eax
+	add  	%eax, %r8d
 	adc		$0, %edx
 	inc   %rsi
 	cmp   %rsi,%rcx
 	jne    bucle
+
+	mov   %r8d, %eax # Mover la suma al valor de retorno
+	cltd 						# Extender signo de %eax --> %edx:%eax
 
 	ret
 
