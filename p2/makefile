@@ -48,14 +48,14 @@ zmm: CXXFLAGS+=-march=knl -O3
 
 ##########################################################################
 
-%: %.s
-	$(CC) $(CFLAGS) -nostartfiles $< -o $@
+%: ./src/%.s
+	$(CC) $(CFLAGS) -nostartfiles $< -o ./bin/$@
 
-%: %.c
-	$(CC) $(CFLAGS) $< -o $@
+%: ./src/%.c
+	$(CC) $(CFLAGS) $< -o ./bin/$@
 
-%: %.cc
-	$(CXX) $(CXXFLAGS) $< -o $@
+%: ./src/%.cc
+	$(CXX) $(CXXFLAGS) $< -o ./bin$@
 
 %.att: %
 	objdump -C -d $< > $@
