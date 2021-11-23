@@ -1,0 +1,42 @@
+Para descubrir la pass la forma que he elegido ha sido analizando el código con objdump.
+
+>$  objdump -d bomba_roman_larrosa >> objdump.txt
+
+Realizando una depuración rápida con gdb -tui
+podemos ver que la función que codifica la pass es la siguiente, que comento a continuación:
+
+0000000000401216 <encode>:                        // mete la cadena (str) y el tamaño de la cadena (size)
+  401216:	f3 0f 1e fa          	endbr64 
+  40121a:	48 83 ee 01          	sub    $0x1,%rsi  // resta uno a size
+  40121e:	b8 00 00 00 00       	mov    $0x0,%eax  // inicializa contador de for (i) a 0
+  401223:	48 63 d0             	movslq %eax,%rdx  // pasa a registro de 64 bits
+  401226:	48 89 f1             	mov    %rsi,%rcx  // mueve size a rcx
+  401229:	48 d1 e9             	shr    %rcx       // divide size entre 2
+  40122c:	48 39 ca             	cmp    %rcx,%rdx  // compara i con la condición de salida
+  40122f:	72 01                	jb     401232     // si es menor salta a la linea donde comienza el for
+  401231:	c3                   	retq   
+  401232:	4c 8d 0c 17          	lea    (%rdi,%rdx,1),%r9      // str + i
+  401236:	41 0f b6 09          	movzbl (%r9),%ecx             // ecx = ((str + i)) --> str[i] 
+  40123a:	49 89 f2             	mov    %rsi,%r10              // size
+  40123d:	49 29 d2             	sub    %rdx,%r10              // size - i
+  401240:	4e 8d 44 17 ff       	lea    -0x1(%rdi,%r10,1),%r8  // str + (size - i - 1)
+  401245:	89 c2                	mov    %eax,%edx              // edx = parte baja de i
+  401247:	41 02 10             	add    (%r8),%dl              // dl = str[size - i - 1] + i
+  40124a:	41 88 11             	mov    %dl,(%r9)              // str[i] = dl  
+  40124d:	29 c1                	sub    %eax,%ecx              // ecx = str[i] - i
+  40124f:	41 88 08             	mov    %cl,(%r8)              // str[size - i - 1] = parte baja de ecx
+  401252:	83 c0 01             	add    $0x1,%eax  // incrementa i
+  401255:	eb cc                	jmp    401223     // salto para evaluar si continua con el bucle
+
+
+En definitiva, podemos ver que el bucle se encarga de guardar en una variable temporal el valor de str[i],
+intercambia el valor de str[i] con el de str[size - i - 1], y durante el proceso, suma y resta el valor de i, 
+respectivamente a cada uno de los valores.
+
+Sabiendo esto podemos hacer una ingeniería inversa para calcular cuál era el valor de la pass recuperandla desde 
+gdb (ojeljnjeYma`pdt\n) obviando el salto de carro. Otra manera sería construir una función "decode", 
+muy similar a encode pero intercambiando la suma y la resta del contador al asignar los valores.
+
+Sea como fuere, el valor inicial de la pass podemos determinar que era "tercer_edificio".
+
+El pin no ha sido codificado por lo que es fácil recuperarlo de gdb: 7777
