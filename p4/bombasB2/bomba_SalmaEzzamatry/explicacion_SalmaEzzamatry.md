@@ -22,7 +22,7 @@ Una vez cargado y con las instrucciones visibles podemos ver que realiza una com
 | passcode |       58833       |
 </div>
 
-Entonces genero las instrucciones del ejecutable mediante `>$ objectdump -d bomba_SalmaEzzamatry`, y analizo las instrucciones de codificación de password y passcode:
+Entonces genero las instrucciones del ejecutable mediante `>$ objdump -d bomba_SalmaEzzamatry`, y analizo las instrucciones de codificación de password y passcode:
 
 ## 2. Password encoding
 
