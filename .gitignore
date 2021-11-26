@@ -35,3 +35,6 @@
 # Compressed files
 *.zip
 
+#Elegoo documentation
+*ELEGOO*
+
