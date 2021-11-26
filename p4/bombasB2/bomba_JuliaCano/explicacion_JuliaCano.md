@@ -64,7 +64,7 @@ Podemos observar que al principio copia el string introducido en el primer argum
   40129b:	88 02                	mov    %al,(%rdx)
 ```
 
-Podemos observar claramente como se suma 2 al valor del string y se guarda en su posición de memoria. Por ello la password sin encriptar se puede adivinar fácilmente haciendo una función que haga lo contrario, o mirando una tabla ascii.
+Podemos observar claramente como se suma 2 al valor del char y se guarda en su posición de memoria. Por ello la password sin encriptar se puede adivinar fácilmente haciendo una función que haga lo contrario, o mirando una tabla ascii.
 
 ## 3. Passcode encoding 🔢
 
