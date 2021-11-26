@@ -24,7 +24,7 @@ Una vez cargado y con las instrucciones visibles podemos ver que realiza una com
 
 Entonces genero las instrucciones del ejecutable mediante `>$ objdump -d bomba_SalmaEzzamatry`, y analizo las instrucciones de codificación de password y passcode:
 
-## 2. Password encoding
+## 2. Password encoding ⌨️
 
 La función de encriptado de la password es la siguiente:
 
@@ -64,9 +64,9 @@ Podemos observar que al principio copia el string introducido en el primer argum
   40129b:	88 02                	mov    %al,(%rdx)
 ```
 
-Podemos observar claramente como se suma 4 al valor del string y se guarda en su posición de memoria. Por ello la password sin encriptar se puede adivinar fácilmente haciendo una función que haga lo contrario, o mirando una tabla ascii.
+Podemos observar claramente como se suma 4 al valor del char y se guarda en su posición de memoria. Por ello la password sin encriptar se puede adivinar fácilmente haciendo una función que haga lo contrario, o mirando una tabla ascii.
 
-## 3. Passcode encoding
+## 3. Passcode encoding 🔢
 
 La función de encriptado del passcode es mucho más sencilla:
 
@@ -83,7 +83,7 @@ $$
 pin = pin + pin*8 = pin*9
 $$
 
-## 4. Valores descodificados
+## 4. Valores descodificados 🔑
 
 Haciendo el cálculo inverso a la encriptación podemos adivinar rápidamente que los valores a introducir son:
 
