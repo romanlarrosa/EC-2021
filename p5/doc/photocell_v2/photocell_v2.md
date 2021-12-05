@@ -14,6 +14,13 @@ int sensorHigh = 0;
 // LED pin
 const int ledPin = 13;
 
+int lightPin = 0;
+int latchPin = 11;
+int clockPin = 9;
+int dataPin = 12;
+
+int leds = 0;
+
 void setup() {
   // Make the LED pin an output and turn it on
   pinMode(ledPin, OUTPUT);
@@ -33,6 +40,17 @@ void setup() {
   }
   // turn the LED off, signaling the end of the calibration period
   digitalWrite(ledPin, LOW);
+
+  pinMode(latchPin, OUTPUT);
+  pinMode(dataPin, OUTPUT);
+  pinMode(clockPin, OUTPUT);
+}
+
+void updateShiftRegister()
+{
+   digitalWrite(latchPin, LOW);
+   shiftOut(dataPin, clockPin, LSBFIRST, leds);
+   digitalWrite(latchPin, HIGH);
 }
 
 void loop() {
@@ -41,9 +59,13 @@ void loop() {
 
   // map the sensor values to a wide range of pitches
   int pitch = map(sensorValue, sensorLow, sensorHigh, 50, 4000);
+  int numLEDSLit = map(sensorValue, sensorLow, sensorHigh, 0, 8);
+
+  leds = (1 << numLEDSLit) - 1;
 
   // play the tone for 20 ms on pin 8
   tone(8, pitch, 20);
+  updateShiftRegister();
 
   // wait for a moment
   delay(10);
